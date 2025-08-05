@@ -72,6 +72,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
+import { getData } from './apiCaller';
+import { spotifyConfig1 } from '@/constants/spotifyConfig';
+
 type Message = {
   id: number;
   text: string;
@@ -82,6 +85,7 @@ const ChatBox: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>('');
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
+  const state = 'some-state-value';
 
   const scrollToBottom = () => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -90,6 +94,27 @@ const ChatBox: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const interpretMessage = (userMessage: Message): Message => {
+    const botMessage: Message = {
+        id: Date.now() + 1,
+        text: 'Echo: ' + input,
+        sender: 'bot',
+    };
+    if (userMessage.text == "login") {
+        const params = {
+            'response_type': 'code',
+            'client_id': spotifyConfig1.CLIENT_ID,
+            'scope': spotifyConfig1.SCOPE,
+            'redirect_uri': spotifyConfig1.REDIRECT_URI,
+            'state': state
+        }
+        const urlParams = new URLSearchParams(params);
+        const url = `${spotifyConfig1.AUTH_CODE_URL}${urlParams.toString()}`;
+        const response = getData(url)
+    }
+    return botMessage
+  };
 
   const sendMessage = () => {
     if (input.trim() === '') return;
@@ -103,11 +128,9 @@ const ChatBox: React.FC = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
 
-    const botMessage: Message = {
-      id: Date.now() + 1,
-      text: 'Echo: ' + input,
-      sender: 'bot',
-    };
+    const botMessage = interpretMessage(userMessage);
+
+    
 
     setTimeout(() => {
       setMessages((prev) => [...prev, botMessage]);

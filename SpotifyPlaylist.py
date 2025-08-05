@@ -8,7 +8,7 @@ import subprocess, json
 class SpotifyPlaylist:
     def __init__(self):
         self.CLIENT_ID = 'd9ca7ba48366413f82eadc7f86395150'
-        self.REDIRECT_URI = 'https://SpotifyAppAPI/mysic'
+        self.REDIRECT_URI = 'https://spotify-playlist-app-rqcw.vercel.app/callback'
         self.SCOPE = "playlist-modify-public"
         self.CLIENT_SECRET = "176f6cfaa92e4665a228d79b6c7c904a"
         self.access_token = ""
