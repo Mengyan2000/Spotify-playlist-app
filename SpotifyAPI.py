@@ -1,6 +1,7 @@
+import urllib.parse
 from flask import Flask, jsonify, session, redirect
 
-import SpotifyPlaylist
+from SpotifyPlaylist import SpotifyPlaylist
 
 if __name__ == '__main__':
     app = Flask(__name__)

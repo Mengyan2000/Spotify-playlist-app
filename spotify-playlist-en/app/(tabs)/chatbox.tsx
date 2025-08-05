@@ -1,75 +1,3 @@
-// import React, { useState } from 'react';
-// import {
-//     DesktopOutlined,
-//     FileOutlined,
-//     PieChartOutlined,
-//     TeamOutlined,
-//     UserOutlined,
-//   } from '@ant-design/icons';
-// import type { MenuProps } from 'antd';
-// import { Breadcrumb, Layout, Menu, theme } from 'antd';
-
-// interface Message {
-//     text: string,
-//     sender: string
-// }
-
-// type MenuItem = Required<MenuProps>['items'][number];
-
-// function getItem(
-//   label: React.ReactNode,
-//   key: React.Key,
-//   icon?: React.ReactNode,
-//   children?: MenuItem[],
-// ): MenuItem {
-//   return {
-//     key,
-//     icon,
-//     children,
-//     label,
-//   } as MenuItem;
-// };
-
-// const items: MenuItem[] = [
-//     getItem('User', 'sub1', <UserOutlined />, [
-//         getItem('Tom', '1'),
-//     ]),
-//     getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6')]),
-//     getItem('Files', '9', <FileOutlined />),
-// ];
-
-// export default function Chatbox() {
-//     const [message, setMessage] = useState<Message[]>([])
-//     const [newMessage, setNewMessage] = useState('');
-
-//     const handleSendMessage = () => {
-//         if (newMessage.trim() !== '') {
-//         setMessage([...message, { text: newMessage, sender: 'You' }]);
-//         setNewMessage('');
-//         }
-//     };
-//     return (
-//         <div className="chatbox-container">
-//             <div className="message-list">
-//                 {message.map((message, index) => (
-//                     <div key={index} className="message">
-//                     <strong>{message.sender}:</strong> {message.text}
-//                   </div>
-//                 ))}
-//             </div>
-//             <div className="input-area">
-//                 <input
-//                 type="text"
-//                 value={newMessage}
-//                 onChange={(e) => setNewMessage(e.target.value)}
-//                 placeholder="Type your message..."
-//                 />
-//                 <button onClick={handleSendMessage}>Send</button>
-//             </div>
-//         </div>
-//     );
-// }
-
 import React, { useState, useRef, useEffect } from 'react';
 
 import { getData } from './apiCaller';
@@ -110,7 +38,7 @@ const ChatBox: React.FC = () => {
             'state': state
         }
         const urlParams = new URLSearchParams(params);
-        const url = `${spotifyConfig1.AUTH_CODE_URL}${urlParams.toString()}`;
+        const url = `http://127.0.0.1:5000/start_login`;
         const response = getData(url)
     }
     return botMessage
