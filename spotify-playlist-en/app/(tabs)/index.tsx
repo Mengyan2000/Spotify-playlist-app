@@ -24,7 +24,16 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Try Talk to the AI Chatbot About Spotify songs</ThemedText>
-  
+        <p style={{margin: '1px'}}>
+          For now, the playlist only supports: 
+          <a href={"https://open.spotify.com/playlist/6UeSakyzhiEt4NB3UAd6NQ"} target="_blank" rel="noopener noreferrer">
+            Billboard top 100
+          </a>
+          . Developer will expand to more playlists in the future...
+        </p>
+        <ThemedText numberOfLines={2} >
+          Format: get ... playlist ... [YOUR_CHOICE_OF_GENRE:  Pop, Hip pop, Country, Afro, etc]     
+        </ThemedText>
         <ChatBox/>
 
       </ThemedView>
@@ -40,7 +49,7 @@ const styles = StyleSheet.create({
   },
   stepContainer: {
     gap: 8,
-    marginBottom: 8,
+    marginBottom: 3,
   },
   reactLogo: {
     height: 178,

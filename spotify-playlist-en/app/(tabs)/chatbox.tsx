@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { getData } from './apiCaller';
+import { getData, postData, getSpotifyAuthCode } from './apiCaller';
 import { spotifyConfig1 } from '@/constants/spotifyConfig';
 
 type Message = {
   id: number;
   text: string;
   sender: 'user' | 'bot';
+  link?: string;
 };
 
 const ChatBox: React.FC = () => {
@@ -23,12 +24,7 @@ const ChatBox: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const interpretMessage = (userMessage: Message): Message => {
-    const botMessage: Message = {
-        id: Date.now() + 1,
-        text: 'Echo: ' + input,
-        sender: 'bot',
-    };
+  const interpretMessage = async (userMessage: Message): Promise<Message[]> => {
     if (userMessage.text == "login") {
         const params = {
             'response_type': 'code',
@@ -36,12 +32,51 @@ const ChatBox: React.FC = () => {
             'scope': spotifyConfig1.SCOPE,
             'redirect_uri': spotifyConfig1.REDIRECT_URI,
             'state': state
-        }
+        };
         const urlParams = new URLSearchParams(params);
         const url = `http://127.0.0.1:5000/start_login`;
-        const response = getData(url)
+        const response = getSpotifyAuthCode()
+        return Promise.resolve([])
+    } else if (userMessage.text.includes("get") && userMessage.text.includes("playlist")) {
+      try {
+        let url = `http://127.0.0.1:5000/get_access_token`;
+        const temp_token = await getData(url);
+        console.log(temp_token);
+        let payload = {
+          "access_token": temp_token
+        };
+        let genre = 'pop';
+        const messages = userMessage.text.trim().split(/\s+/);
+        if (messages.length > 2) {
+          genre = messages[messages.length-1];
+        }
+
+        url = `http://127.0.0.1:5000/PlaylistSuggest/${genre}`;
+        const data = await postData(url, payload);
+        console.log("postData response", data);
+
+        let botMessage: Message[] = data?.message.map((track: any, idx: number) => 
+        ({
+          id: idx,
+          text: track.song + " by " + track.artists.join(", "),
+          link: `https://open.spotify.com/track/${track.id}`,
+          sender: 'bot'
+        }));
+        console.log(botMessage, "in chatbox");
+        return botMessage;
+      } catch (error) {
+        throw new Error(`GET failed: ${error}`);
+      }
+        
+    } else {
+      let botMessage: Message = {
+        id: Date.now() + 1,
+        text: 'Echo: ' + input,
+        sender: 'bot',
+      };
+      return [botMessage]
     }
-    return botMessage
+    
   };
 
   const sendMessage = () => {
@@ -56,13 +91,15 @@ const ChatBox: React.FC = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
 
-    const botMessage = interpretMessage(userMessage);
-
-    
-
-    setTimeout(() => {
-      setMessages((prev) => [...prev, botMessage]);
-    }, 500);
+    let botMessage = [userMessage];
+    return interpretMessage(userMessage).then(
+      res => {
+        botMessage=res;
+        console.log("before timeout:", botMessage);
+        setTimeout(() => {
+          setMessages((prev) => [...prev, ...botMessage]);
+        }, 500);
+    });
   };
 
   return (
@@ -78,6 +115,11 @@ const ChatBox: React.FC = () => {
             }}
           >
             {msg.text}
+            {msg.link && <p>(
+                <a href={msg.link} target="_blank" rel="noopener noreferrer">
+                  Open Spotify Playlist
+                </a>
+            )</p>}
           </div>
         ))}
         <div ref={endOfMessagesRef} />
