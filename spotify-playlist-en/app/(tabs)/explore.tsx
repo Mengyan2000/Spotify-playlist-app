@@ -21,9 +21,32 @@ export default function TabTwoScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
+        <ThemedText type="title">Q&A</ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
+      <ThemedText>This section includes all the answer to your questions/confusions.</ThemedText>
+      <Collapsible title="By Mandy: Limitation">
+      <ThemedText>
+          <p style={{margin: '1px'}}>
+            Notes: Limitation: 
+            <ul>
+              <li> It can only recommend songs based on a specified Spotify playlist</li>
+                <ul>
+                  <li>Default Spotify playlist: 
+                    <a href={"https://open.spotify.com/playlist/6UeSakyzhiEt4NB3UAd6NQ"} target="_blank" rel="noopener noreferrer">
+                      Billboard top 100
+                    </a>
+                  </li>
+                </ul>
+              <li> The prompt is static -- chatbot will only understand questions with sentence containing "get", "playlist", "[A genre]"</li>
+                <ul>
+                  <li> If you ask something other than the above prompt, it will just say "echo: your_message"</li>
+                </ul>
+              <li> Chatbot couldn't add songs to your playlist due to compliance issue, it will posts a list of songs as answer</li>
+            </ul>
+            Future-to-do: Developer will expand to more playlists in the future...
+          </p>
+        </ThemedText>
+      </Collapsible>
       <Collapsible title="File-based routing">
         <ThemedText>
           This app has two screens:{' '}
@@ -37,12 +60,6 @@ export default function TabTwoScreen() {
         <ExternalLink href="https://docs.expo.dev/router/introduction">
           <ThemedText type="link">Learn more</ThemedText>
         </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
       </Collapsible>
       <Collapsible title="Images">
         <ThemedText>

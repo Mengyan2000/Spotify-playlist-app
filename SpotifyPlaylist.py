@@ -201,6 +201,7 @@ class SpotifyPlaylist:
     def add_my_genre_to_playlist(self, fav_genre):
         auth_url, state = self.generate_auth_url()
         print("🔗 Open this URL in your browser and log in:")
+        print(auth_url)
         
         redirect_url = input("\n📋 Paste the full redirect URL you were redirected to: ").strip()
         code, returned_state = self.extract_code_from_url(redirect_url)

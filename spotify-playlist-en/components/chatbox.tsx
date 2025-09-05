@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { getData, postData, getSpotifyAuthCode } from './apiCaller';
+import { getData, postData, getSpotifyAuthCode } from '../app/(tabs)/apiCaller';
 import { spotifyConfig1 } from '@/constants/spotifyConfig';
 
 type Message = {
@@ -46,9 +46,9 @@ const ChatBox: React.FC = () => {
           "access_token": temp_token
         };
         let genre = 'pop';
-        const messages = userMessage.text.trim().split(/\s+/);
-        if (messages.length > 2) {
-          genre = messages[messages.length-1];
+        const userM = userMessage.text.trim().split(/\s+/);
+        if (userM.length > 2) {
+          genre = userM[userM.length-1];
         }
 
         url = `http://127.0.0.1:5000/PlaylistSuggest/${genre}`;
